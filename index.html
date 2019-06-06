@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+ <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script type="text/javascript" src="flaviusmatis-simplePagination.js-e32c66e/jquery.simplePagination.js"></script>
+<link type="text/css" rel="stylesheet" href="flaviusmatis-simplePagination.js-e32c66e/simplePagination.css"/>
+<script>
+	$(document).ready(function(){
+
+		var line = $(location).attr('href').split('-');
+		var page_num = line[1];
+		console.log(page_num);
+		$(function() {
+					$('#pagination').pagination('drawPage',page_num);
+		});
+		$.post("getPageData",
+						{
+							page: page_num
+						},
+						function(data,status){
+							$('#imagesListMain').empty();
+							console.log(data);
+							  data.data.map((el)=> 
+								{
+									  var data = el.split(",");
+										$('#imagesListMain').append('<div id=imagesList><img id = "'+data[0]+'"src="' + data[1] + '" /><input type="checkbox" style="width:17px;height:17px" name="image" value="'+data[0]+'"></div>'); 
+							});
+		});
+
+		$(window).bind('hashchange', function() {
+		
+			var line = $(location).attr('href').split('-');
+			var page_num = line[1];
+			console.log(page_num);
+			$(function() {
+					$('#pagination').pagination('drawPage',page_num);
+				});
+			 $.post("getPageData",
+						{
+							page: page_num
+						},
+						function(data,status){
+							$('#imagesListMain').empty();
+									console.log(data);
+							  data.data.map((el)=> 
+								{
+									  var data = el.split(",");
+										$('#imagesListMain').append('<div id=imagesList><img id = "'+data[0]+'"src="' + data[1] + '" /><input type="checkbox" style="width:17px;height:17px" name="image" value="'+data[1]+'"></div>'); 
+								});
+				 });
+			}); 
+
+		$("button").click(function(){
+			var likedImage = [];
+			var obj = {};
+        $.each($("input[name='image']:checked"), function(){    
+								obj = {};        
+								obj["id"] = $(this).val();
+								obj["url"]= $('#imagesListMain #'+$(this).val()).attr('src');
+								likedImage.push(obj);
+						});
+						
+							console.log(likedImage);
+							$.post("store",
+							{
+								image_data: likedImage
+							},
+							function(data,status){
+								alert("Data written successfully");
+							
+							});
+		});
+
+		$('#pagination').pagination({
+        items: 1000,
+        itemsOnPage: 10,
+				cssStyle: 'light-theme',
+				onPageClick: function(pageNumber) {
+						console.log($(location).attr('href'));
+						console.log(pageNumber);
+						$.post("getPageData",
+						{
+							page: pageNumber
+						},
+						function(data,status){
+							$('#imagesListMain').empty();
+							console.log(data);
+							  data.data.map((el)=> 
+								{
+									  var data = el.split(",");
+										$('#imagesListMain').append('<div id=imagesList><img id = "'+data[0]+'"src="' + data[1] + '" /><input type="checkbox" style="width:17px;height:17px" name="image" value="'+data[0]+'"></div>'); 
+							});
+						});
+        }
+    });
+});
+
+
+</script>
+<style>
+	#imagesList
+	{
+		width: 250px;
+    float: left;
+		text-align: center
+			}
+	#imagesList img
+	{
+		box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+		object-fit: contain;
+		padding: 10px;
+	  height: 300px;
+    width: 100%;
+		float: left;
+	}
+	#wrapper{
+		text-align: center
+	}
+	.simple-pagination {
+    display: inline-block;
+    overflow: hidden;
+    padding: 25px 5px 5px 15px;
+    margin: 0;
+}
+#deleteBtn {
+      left: 20px;
+      position: fixed;
+      top: 18px;
+			width: 140px;
+			height: 45px;
+			font-family: 'Roboto', sans-serif;
+			font-size: 12px;
+			text-transform: uppercase;
+			letter-spacing: 2.5px;
+			font-weight: 600;
+			color: #000;
+			background-color: #fff;
+			border: none;
+			border-radius: 45px;
+			box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+
+    }
+	body{
+		font-family: 'Roboto', sans-serif;
+	}
+	.light-theme{
+		font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+	}
+	.light-theme a{
+	text-decoration: none;
+	}
+
+</style>
+</head>
+<body>
+<div id= "wrapper"><div id="pagination"></div></div>
+<div id="imagesListMain">
+</div>
+<div style="height: 20px;width:100%;float:left"></div>
+<div>
+<button id="deleteBtn">Store</button>
+</div>
+
+
+</body>
+</html>
