@@ -83,9 +83,9 @@
 			}); 
 
 		$("#deleteBtn").click(function(){
-			console.log("DFjn")
 			var likedImage = [];
 			var obj = {};
+
         $.each($("input[name='image']:checked"), function(){    
 								obj = {};  
 								console.log($(this).val())
@@ -95,16 +95,22 @@
 								likedImage.push(obj);
 						});
 						
-							console.log(likedImage);
+							// console.log(likedImage);
+							if(likedImage.length>0)
+							{
 							$.post("store",
 							{
 								image_data: likedImage
 							},
 							function(data,status){
-								alert("Data written successfully");
+								alert("Data written successfully.");
 							
 							});
+						}
+						else
+						alert("Please select images to insert.");
 		});
+
 
 		$('#pagination').pagination({
         items: 557000,
