@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
  <head>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script type="text/javascript" src="flaviusmatis-simplePagination.js-e32c66e/jquery.simplePagination.js"></script>
+
 <link type="text/css" rel="stylesheet" href="flaviusmatis-simplePagination.js-e32c66e/simplePagination.css"/>
+					
 <script>
 	$(document).ready(function(){
 
@@ -36,12 +39,13 @@
 										var data = el.value.split(",");
 										if(el.checked)
 										{
-										$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+										$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
 							
 										}
 										else{
-											$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 	}
+											$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 	}
 										});
+								
 		});
 
 		$(window).bind('hashchange', function() {
@@ -88,11 +92,19 @@
 
         $.each($("input[name='image']:checked"), function(){    
 								obj = {};  
-								console.log($(this).val())
-								obj["id"] = $(this).val();
-								obj["url"]= $('#imagesListMain .'+$(this).val()).attr('src');
-								console.log(obj)
-								likedImage.push(obj);
+								console.log($(this).val());
+								if($(this).val()!=undefined && $(this).val()!="")
+								{
+									obj["id"] = $(this).val();
+									obj["url"]= $('#imagesListMain .'+$(this).val()).attr('src');
+									console.log(obj);
+								
+									likedImage.push(obj);
+									
+								}
+								
+								
+								
 						});
 						
 							// console.log(likedImage);
@@ -187,53 +199,10 @@
 						});
         }
 		});
-		
-
-
-const images = document.querySelectorAll('img');
-
-const options = {
-  // If the image gets within 50px in the Y axis, start the download.
-  root: null, // Page as root
-  rootMargin: '0px',
-  threshold: 0.1
-};
-
-const fetchImage = (url) => {
-  console.log(url)
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.src = url;
-    image.onload = resolve;
-    image.onerror = reject;
-  });
-}
-
-const loadImage = (image) => {
-  const src = image.dataset.src;
-  fetchImage(src).then(() => {
-    // console.log(src)
-    image.src = src;
-  })
-}
-
-const handleIntersection = (entries, observer) => {
-  entries.forEach(entry => {
-    if(entry.intersectionRatio > 0) {
-      console.log(entry.intersectionRatio);
-      loadImage(entry.target)
-    }
-  })
-}
-
-// The observer for the images on the page
-const observer = new IntersectionObserver(handleIntersection, options);
-
-images.forEach(img => {
-  observer.observe(img);
-})
-
 });
+
+
+         
 
 
 </script>
@@ -419,7 +388,6 @@ images.forEach(img => {
 
 </body>
 </html>
-
 
 
 
