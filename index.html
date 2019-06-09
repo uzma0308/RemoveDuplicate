@@ -7,8 +7,19 @@
 <script>
 	$(document).ready(function(){
 
-		var line = $(location).attr('href').split('-');
-		var page_num = line[1];
+		var line = $(location).attr('href').split('#');
+		if(line[1]!= undefined)
+		{
+		var line2 = line[1].split('-');
+		var page_num = line2[1];
+		if(page_num == undefined)
+		{
+			page_num = 1;
+		}
+	}
+	else{
+		page_num = 1;
+	}
 		console.log(page_num);
 		$(function() {
 					$('#pagination').pagination('drawPage',page_num);
@@ -22,15 +33,22 @@
 							console.log(data);
 							  data.data.map((el)=> 
 								{
-									  var data = el.split(",");
-										$('#imagesListMain').append('<div id=imagesList><img id = "'+data[0]+'"src="' + data[1] + '" /><input type="checkbox" style="width:17px;height:17px" name="image" value="'+data[0]+'"></div>'); 
-							});
+										var data = el.value.split(",");
+										if(el.checked)
+										{
+										$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+							
+										}
+										else{
+											$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 	}
+										});
 		});
 
 		$(window).bind('hashchange', function() {
 		
-			var line = $(location).attr('href').split('-');
-			var page_num = line[1];
+		var line = $(location).attr('href').split('#');
+		 var line2 = line[1].split('-');
+		  var page_num = line2[1];
 			console.log(page_num);
 			$(function() {
 					$('#pagination').pagination('drawPage',page_num);
@@ -44,19 +62,36 @@
 									console.log(data);
 							  data.data.map((el)=> 
 								{
-									  var data = el.split(",");
-										$('#imagesListMain').append('<div id=imagesList><img id = "'+data[0]+'"src="' + data[1] + '" /><input type="checkbox" style="width:17px;height:17px" name="image" value="'+data[1]+'"></div>'); 
-								});
+									  var data = el.value.split(",");
+										if(el.checked)
+										{
+										$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+							
+										}
+										else{
+											$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 	}
+									//	if(el.checked)
+										// {
+										// $('#imagesListMain').append('<div id=imagesList> <label class="container" for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input name="image"  type="checkbox" checked style="width:17px;height:17px" id = "'+data[0]+'"value="'+data[0]+'"><span class="checkmark"></span></label></div>'); 
+							
+										// }
+										// else{
+										// 	$('#imagesListMain').append('<div id=imagesList> <label class="container" for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input  name="image"  type="checkbox" style="width:17px;height:17px" id = "'+data[0]+'"value="'+data[0]+'"><span class="checkmark"></span></label></div>'); 	}
+											
+									});
 				 });
 			}); 
 
-		$("button").click(function(){
+		$("#deleteBtn").click(function(){
+			console.log("DFjn")
 			var likedImage = [];
 			var obj = {};
         $.each($("input[name='image']:checked"), function(){    
-								obj = {};        
+								obj = {};  
+								console.log($(this).val())
 								obj["id"] = $(this).val();
-								obj["url"]= $('#imagesListMain #'+$(this).val()).attr('src');
+								obj["url"]= $('#imagesListMain .'+$(this).val()).attr('src');
+								console.log(obj)
 								likedImage.push(obj);
 						});
 						
@@ -72,14 +107,16 @@
 		});
 
 		$('#pagination').pagination({
-        items: 1000,
-        itemsOnPage: 10,
+        items: 557000,
+        itemsOnPage: 500,
 				cssStyle: 'light-theme',
 				onPageClick: function(pageNumber) {
 						console.log($(location).attr('href'));
 						console.log(pageNumber);
 						$.post("getPageData",
 						{
+
+							
 							page: pageNumber
 						},
 						function(data,status){
@@ -87,12 +124,64 @@
 							console.log(data);
 							  data.data.map((el)=> 
 								{
-									  var data = el.split(",");
-										$('#imagesListMain').append('<div id=imagesList><img id = "'+data[0]+'"src="' + data[1] + '" /><input type="checkbox" style="width:17px;height:17px" name="image" value="'+data[0]+'"></div>'); 
-							});
+									  var data = el.value.split(",");
+										if(el.checked)
+										{
+										$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+							
+										}
+										else{
+											$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 	}
+										});
 						});
         }
-    });
+		});
+		
+
+
+const images = document.querySelectorAll('img');
+
+const options = {
+  // If the image gets within 50px in the Y axis, start the download.
+  root: null, // Page as root
+  rootMargin: '0px',
+  threshold: 0.1
+};
+
+const fetchImage = (url) => {
+  console.log(url)
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.src = url;
+    image.onload = resolve;
+    image.onerror = reject;
+  });
+}
+
+const loadImage = (image) => {
+  const src = image.dataset.src;
+  fetchImage(src).then(() => {
+    // console.log(src)
+    image.src = src;
+  })
+}
+
+const handleIntersection = (entries, observer) => {
+  entries.forEach(entry => {
+    if(entry.intersectionRatio > 0) {
+      console.log(entry.intersectionRatio);
+      loadImage(entry.target)
+    }
+  })
+}
+
+// The observer for the images on the page
+const observer = new IntersectionObserver(handleIntersection, options);
+
+images.forEach(img => {
+  observer.observe(img);
+})
+
 });
 
 
@@ -140,6 +229,24 @@
 			box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 
     }
+		#downloadBtn {
+			text-decoration: none;
+      right: 5px;
+      position: fixed;
+      top: 18px;
+			padding: 20px;
+			font-family: 'Roboto', sans-serif;
+			font-size: 12px;
+			text-transform: uppercase;
+			letter-spacing: 2.5px;
+			font-weight: 600;
+			color: #000;
+			background-color: #fff;
+			border: none;
+			border-radius: 45px;
+			box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+
+    }
 	body{
 		font-family: 'Roboto', sans-serif;
 	}
@@ -154,17 +261,97 @@
 	text-decoration: none;
 	}
 
+
+/* 
+	.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+    top: 0;
+    left: 35px;
+    height: 35px;
+    width: 35px;
+    background-color: #aaa;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+	left: 12px;
+    top: 9px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 4px 4px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+} */
 </style>
 </head>
 <body>
 <div id= "wrapper"><div id="pagination"></div></div>
+
 <div id="imagesListMain">
 </div>
 <div style="height: 20px;width:100%;float:left"></div>
 <div>
 <button id="deleteBtn">Store</button>
 </div>
+<div>
+	<a id="downloadBtn" href="/likedImage.csv" download="likedImage.csv">Download</a>
+	</div>
 
 
 </body>
 </html>
+
+
+
+
+
+
+
+
