@@ -16,7 +16,7 @@
 		{
 			page_num = 1;
 		}
-	}
+		}
 	else{
 		page_num = 1;
 	}
@@ -116,6 +116,42 @@
 				if (r == true) {
 					$.get("clearCSV", function(data, status){
 								alert("CSV cleared successfully.");
+								var line = $(location).attr('href').split('#');
+									if(line[1]!= undefined)
+									{
+									var line2 = line[1].split('-');
+									var page_num = line2[1];
+									if(page_num == undefined)
+									{
+										page_num = 1;
+									}
+									}
+								else{
+									page_num = 1;
+								}
+
+								$(function() {
+										$('#pagination').pagination('drawPage',page_num);
+							});
+									$.post("getPageData",
+										{
+											page: page_num
+										},
+										function(data,status){
+											$('#imagesListMain').empty();
+											console.log("cleared data");
+												data.data.map((el)=> 
+												{
+														var data = el.value.split(",");
+														if(el.checked)
+														{
+														$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+											
+														}
+														else{
+															$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" src="' + data[1] + '" /><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 	}
+														});
+						});
 						});
 				}
 		});
