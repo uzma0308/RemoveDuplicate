@@ -28,6 +28,13 @@ router.get('/',function(req,res){
 res.sendFile(path.join(__dirname+'/index.html'));
 });
 
+router.get('/clearCSV',function(req,res){
+  fs.truncate('./public/likedImage.csv', 0, function(){
+    console.log('done');
+    res.send("Cleared successfully");
+  })
+});
+
 router.post('/getPageData',function(req,res){
 
   fs.readFile('./public/data.csv', 'utf8', function(err, data)
@@ -86,9 +93,7 @@ router.post('/store',function(req,res){
           console.log('The CSV file was written successfully');
           res.send("deleted succesfully");
 });
-
-
- });
+});
 app.use('/', router);
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 

@@ -98,17 +98,26 @@
 							// console.log(likedImage);
 							if(likedImage.length>0)
 							{
-							$.post("store",
-							{
-								image_data: likedImage
-							},
-							function(data,status){
-								alert("Data written successfully.");
-							
-							});
+								$.post("store",
+								{
+									image_data: likedImage
+								},
+								function(data,status){
+									alert("Data written successfully.");
+								
+								});
 						}
 						else
 						alert("Please select images to insert.");
+		});
+		$("#clearBtn").click(function(){
+		
+				var r = confirm("Are you sure you want to clear csv");
+				if (r == true) {
+					$.get("clearCSV", function(data, status){
+								alert("CSV cleared successfully.");
+						});
+				}
 		});
 
 
@@ -218,10 +227,28 @@ images.forEach(img => {
     margin: 0;
 }
 #deleteBtn {
-      left: 20px;
+      left: 5px;
       position: fixed;
       top: 18px;
-			width: 140px;
+			width: 80px;
+			height: 45px;
+			font-family: 'Roboto', sans-serif;
+			font-size: 12px;
+			text-transform: uppercase;
+			letter-spacing: 2.5px;
+			font-weight: 600;
+			color: #000;
+			background-color: #fff;
+			border: none;
+			border-radius: 45px;
+			box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+
+    }
+		#clearBtn {
+      left: 90px;
+      position: fixed;
+      top: 18px;
+			width: 80px;
 			height: 45px;
 			font-family: 'Roboto', sans-serif;
 			font-size: 12px;
@@ -346,6 +373,9 @@ images.forEach(img => {
 <div>
 <button id="deleteBtn">Store</button>
 </div>
+<div>
+	<button id="clearBtn">Clear</button>
+	</div>
 <div>
 	<a id="downloadBtn" href="/likedImage.csv" download="likedImage.csv">Download</a>
 	</div>
