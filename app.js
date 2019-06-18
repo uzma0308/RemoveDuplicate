@@ -44,7 +44,7 @@ router.post('/getPageData',function(req,res){
       if (err)
           console.log(err);
       let lines = data.split('\n');
-      var responseData = lines.slice((pagenumber-1)*500,pagenumber*500);
+      var responseData = lines.slice((pagenumber-1)*1000,pagenumber*1000);
       fs.readFile('./public/likedImage.csv', 'utf8', function(err, data2)
       {
         

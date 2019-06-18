@@ -52,11 +52,11 @@
 
 		const lazyLoad = target => {
 					const io = new IntersectionObserver((entries, observer) => {
-					console.log(entries)
+					// console.log(entries)
 					entries.forEach(entry => {
-					console.log('😍');
-					console.log(entry);
-					console.log(entry.isIntersecting);
+					// console.log('😍');
+					// console.log(entry);
+					// console.log(entry.isIntersecting);
 					if (entry.isIntersecting) {
 						const img = entry.target;
 						const src = img.getAttribute('data-src');
@@ -196,7 +196,7 @@
 
 		$('#pagination').pagination({
         items: 557000,
-        itemsOnPage: 500,
+        itemsOnPage: 1000,
 				cssStyle: 'light-theme',
 				onPageClick: function(pageNumber) {
 						console.log($(location).attr('href'));
