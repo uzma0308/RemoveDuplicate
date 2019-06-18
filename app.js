@@ -37,7 +37,7 @@ router.get('/clearCSV',function(req,res){
 
 router.post('/getPageData',function(req,res){
 
-  fs.readFile('/home/uzma/Downloads/data.csv', 'utf8', function(err, data)
+  fs.readFile('./public/data.csv', 'utf8', function(err, data)
   {
     console.log(req.body.page);
     var pagenumber = req.body.page;
