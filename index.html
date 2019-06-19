@@ -5,7 +5,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script type="text/javascript" src="flaviusmatis-simplePagination.js-e32c66e/jquery.simplePagination.js"></script>	
 <link type="text/css" rel="stylesheet" href="flaviusmatis-simplePagination.js-e32c66e/simplePagination.css"/>
-					
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">					
 <script>
 	$(document).ready(function(){
 
@@ -36,19 +36,21 @@
 							  data.data.map((el)=> 
 								{
 										var data = el.value.split(",");
+										var image_url = data[1].toString().replace(/"/g, "");
 										if(el.checked)
 										{
-										$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" data-src="' + data[1] + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+										$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0]+'" name="image" data-src="' + image_url + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label><i class="fa fa-refresh icon_refresh '+data[0]+'"></i></div>'); 
 							
 										}
 										else{
-											$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" data-src="' + data[1] + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+											$('#imagesListMain').append('<div id=imagesList><label for="'+data[0]+'"><img class = "'+data[0]+ '" name="image" data-src="' + image_url + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label><i class="fa fa-refresh icon_refresh '+data[0]+'"</i></div>'); 
 											}
-										});
+										
+								});
 									
 										const targets = document.querySelectorAll('img');
 										targets.forEach(lazyLoad);
-		});
+						});
 
 		const lazyLoad = target => {
 					const io = new IntersectionObserver((entries, observer) => {
@@ -90,17 +92,17 @@
 									console.log(data);
 							  data.data.map((el)=> 
 								{
-									  
-										var data = el.value.split(",");
+									  var data = el.value.split(",");
+										var image_url = data[1].toString().replace(/"/g, "");
 										if(el.checked)
 										{
-										$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" data-src="' + data[1] + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+										$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0]+'" name="image" data-src="' + image_url + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label><i class="fa fa-refresh icon_refresh '+data[0]+'"></i></div>'); 
 							
 										}
 										else{
-											$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" data-src="' + data[1] + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+											$('#imagesListMain').append('<div id=imagesList><label for="'+data[0]+'"><img class = "'+data[0]+ '" name="image" data-src="' + image_url + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label><i class="fa fa-refresh icon_refresh '+data[0]+'"</i></div>'); 
 											}
-										});
+									});
 									
 										const targets = document.querySelectorAll('img');
 										targets.forEach(lazyLoad);
@@ -123,9 +125,6 @@
 									likedImage.push(obj);
 									
 								}
-								
-								
-								
 						});
 						
 							// console.log(likedImage);
@@ -176,15 +175,16 @@
 												data.data.map((el)=> 
 												{
 													var data = el.value.split(",");
+													var image_url = data[1].toString().replace(/"/g, "");
 													if(el.checked)
 													{
-													$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" data-src="' + data[1] + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+													$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0]+'" name="image" data-src="' + image_url + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label><i class="fa fa-refresh icon_refresh '+data[0]+'"></i></div>'); 
 										
 													}
 													else{
-														$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" data-src="' + data[1] + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+														$('#imagesListMain').append('<div id=imagesList><label for="'+data[0]+'"><img class = "'+data[0]+ '" name="image" data-src="' + image_url + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label><i class="fa fa-refresh icon_refresh '+data[0]+'"</i></div>'); 
 														}
-													});
+												});
 												
 													const targets = document.querySelectorAll('img');
 													targets.forEach(lazyLoad);
@@ -212,16 +212,17 @@
 							console.log(data);
 							  data.data.map((el)=> 
 								{
-									var data = el.value.split(",");
+										var data = el.value.split(",");
+										var image_url = data[1].toString().replace(/"/g, "");
 										if(el.checked)
 										{
-										$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" data-src="' + data[1] + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+										$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0]+'" name="image" data-src="' + image_url + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label><i class="fa fa-refresh icon_refresh '+data[0]+'"></i></div>'); 
 							
 										}
 										else{
-											$('#imagesListMain').append('<div id=imagesList> <label for="'+data[0]+'"><img class = "' + data[0] + '" name="image" data-src="' + data[1] + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label></div>'); 
+											$('#imagesListMain').append('<div id=imagesList><label for="'+data[0]+'"><img class = "'+data[0]+ '" name="image" data-src="' + image_url + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+data[0]+'"value="'+data[0]+'"></label><i class="fa fa-refresh icon_refresh '+data[0]+'"</i></div>'); 
 											}
-										});
+								});
 									
 										const targets = document.querySelectorAll('img');
 										targets.forEach(lazyLoad);
@@ -229,18 +230,29 @@
         }
 		});
 });
-
-
-         
-
-
+$(document).on('click','.icon_refresh',function(){
+let classList = this.classList;
+console.log('.'+classList[3]);
+var srcImage = $('.'+classList[3]).attr('src');
+console.log(srcImage);
+$('.'+classList[3]).attr("src", srcImage + '?' + Math.random());
+})
 </script>
 <style>
+	.icon_refresh{
+	  font-size: 30px;
+    color: #666;
+    position: absolute;
+    top: -10%;
+    right: 5px;
+	}
 	#imagesList
 	{
 		width: 250px;
     float: left;
-		text-align: center
+		text-align: center;
+		margin-top: 6%;
+		position: relative;
 			}
 	#imagesList img
 	{
