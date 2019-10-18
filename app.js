@@ -22,38 +22,49 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static('public'))
 
+//returns the index.html file
 router.get('/',function(req,res){
   var hostname = req.headers.host; 
   var pathname = url.parse(req.url).pathname; 
   console.log('http://' + hostname + pathname);
-res.sendFile(path.join(__dirname+'/index.html'));
+  res.sendFile(path.join(__dirname+'/index.html'));
 });
 
+//clears the csv
 router.get('/clearCSV',function(req,res){
   fs.truncate('./public/likedImage.csv', 0, function(){
-    console.log('done');
     res.send("Cleared successfully");
   })
 });
 
+//fetch number of data from csv file
 router.post('/getPageData',function(req,res){
 
   fs.readFile('./public/data.csv', 'utf8',async function(err, data)
   {
-    console.log(req.body.page);
+    console.log("Fetching data of page",req.body.page);
     var pagenumber = req.body.page;
       if (err)
           console.log(err);
       let lines = data.split('\n');
-      var responseData = lines.slice((pagenumber-1)*400,pagenumber*400);
+      var responseData = lines.slice((pagenumber-1)*100,pagenumber*100);
       var sent = [];
 
       for(let i = 0; i < responseData.length; i++)
       {
        
           var url = responseData[i].split(",");
-          console.log(i)
-          var size = await getAllImageSize(url[1]);
+
+          //getting images size for each image
+
+          var size = {
+            width: 0,
+            height: 0,
+            size: 0
+          };
+          // var size = await getAllImageSize(url[1]);
+          // uncomment upper line to get image sizes
+          
           size.size = (Number(size.size)/1024).toFixed(2);;
           var obj = {
             value : responseData[i],
@@ -67,57 +78,6 @@ router.post('/getPageData',function(req,res){
       
   });
 });
-
-// router.post('/getPageData',function(req,res){
-
-//   fs.readFile('./public/data.csv', 'utf8', function(err, data)
-//   {
-//     console.log(req.body.page);
-//     var pagenumber = req.body.page;
-//       if (err)
-//           console.log(err);
-//       let lines = data.split('\n');
-//       var responseData = lines.slice((pagenumber-1)*100,pagenumber*100);
-//       fs.readFile('./public/likedImage.csv', 'utf8', function(err, data2)
-//       {
-        
-//         if (err)
-//         console.log(err);
-//         let line = data2.split('\n');
-//         var likeData =[];
-//         line.map((x)=>{
-//           var data = x.split(',');
-//           if(data!= undefined && data!='"')
-//           {
-//             likeData.push(data[0]);
-//           }
-//         })
-//         var sentResp = [];
-//         var obj ={};
-//         responseData.map((x)=>{
-//             obj={};
-//             obj["value"] = x;
-//             var get = x.split(',');
-            
-//             if(likeData.indexOf(get[0])== -1){
-//               obj["checked"] = false;
-//             }
-//             else
-//             {
-//               obj["checked"] = true;
-//             }
-//             var size = await getAllImageSize(x);
-//             obj["size"] = size;
-//             sentResp.push(obj);
-//         })
-       
-//         res.json({ data: sentResp });
-
-//       });
-      
-//   });
-// });
-
 function getAllImageSize(x)
 {
  try{
@@ -143,8 +103,7 @@ function getAllImageSize(x)
               }
 
             });
-            
-    })
+         })
     }
     catch(e)
     {
@@ -153,14 +112,13 @@ function getAllImageSize(x)
     }
 
 }
-
+//storing the selected checked images to CSV file
 router.post('/store',function(req,res){
-    console.log(req.body.image_data);
     csvWriter  
       .writeRecords(req.body.image_data)
         .then(()=>{ 
           console.log('The CSV file was written successfully');
-          res.send("deleted succesfully");
+          res.send("Written succesfully");
 });
 });
 app.use('/', router);

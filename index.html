@@ -8,59 +8,29 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">					
 <script>
 	$(document).ready(function(){
-
+	
+		//Getting the page number from url
 		var line = $(location).attr('href').split('#');
 		if(line[1]!= undefined)
 		{
-		var line2 = line[1].split('-');
-		var page_num = line2[1];
-		if(page_num == undefined)
-		{
+			var line2 = line[1].split('-');
+			var page_num = line2[1];
+			if(page_num == undefined)
+			{
+				page_num = 1;
+			}
+		}
+		else{
 			page_num = 1;
 		}
-		}
-	else{
-		page_num = 1;
-	}
-		console.log(page_num);
-		$(function() {
-					$('#pagination').pagination('drawPage',page_num);
-		});
-		$.post("getPageData",
-						{
-							page: page_num
-						},
-						function(data,status){
-							$('#imagesListMain').empty();
-							console.log(data);
-							  data.data.map((el)=> 
-								{
-										var data = el.value.split(",");
-										var image_id = data[0];
-										data.shift()
-										var image_url = data.join(",");
-										if(el.checked)
-										{
-										$('#imagesListMain').append('<div id=imagesList> <h5>'+el.size.height+' * '+el.size.width+'</h5> <h5> ( '+el.size.size+' ) </h5> <label for="'+image_id+'"><img class = "' + image_id+'" name="image" data-src="' + image_url + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+image_id+'"value="'+image_id+'"></label><i class="fa fa-refresh icon_refresh '+image_id+'"></i></div>'); 
-							
-										} 
-										else{
-											$('#imagesListMain').append('<div id=imagesList> <h5>'+el.size.height+' * '+el.size.width+'</h5> <h5>( '+el.size.size+' ) </h5>  <label for="'+image_id+'"><img class = "'+image_id+ '" name="image" data-src="' + image_url + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+image_id+'"value="'+image_id+'"></label><i class="fa fa-refresh icon_refresh '+image_id+'"</i></div>'); 
-											}
-										
-								});
-									
-										const targets = document.querySelectorAll('img');
-										targets.forEach(lazyLoad);
-						});
-
+		highlightPage(page_num);
+		fetchData(page_num);
+		//Implementing lazy loading
 		const lazyLoad = target => {
 					const io = new IntersectionObserver((entries, observer) => {
-					// console.log(entries)
+
 					entries.forEach(entry => {
-					// console.log('😍');
-					// console.log(entry);
-					// console.log(entry.isIntersecting);
+	
 					if (entry.isIntersecting) {
 						const img = entry.target;
 						const src = img.getAttribute('data-src');
@@ -76,48 +46,63 @@
 					io.observe(target)
 					};
 
-		$(window).bind('hashchange', function() {
-		
-		var line = $(location).attr('href').split('#');
-		 var line2 = line[1].split('-');
-		  var page_num = line2[1];
-			console.log(page_num);
-			$(function() {
+	function highlightPage(page_num)
+	{
+		//Highlighting page number
+		$(function() {
 					$('#pagination').pagination('drawPage',page_num);
-				});
-			 $.post("getPageData",
+		});
+	}
+	function fetchData(page_num)
+	{
+		console.log("Fetching data for ",page_num);
+		//Fetching page data from backend
+		$.post("getPageData",
 						{
 							page: page_num
 						},
 						function(data,status){
 							$('#imagesListMain').empty();
-									console.log(data);
+						
 							  data.data.map((el)=> 
 								{
-									var data = el.value.split(",");
+										var data = el.value.split(",");
 										var image_id = data[0];
 										data.shift()
 										var image_url = data.join(",");
+										//Appending response data to html dynamically
 										if(el.checked)
 										{
-										$('#imagesListMain').append('<div id=imagesList><h5>'+el.size.height+' * '+el.size.width+'</h5><h5>( '+el.size.size+' ) </h5>  <label for="'+image_id+'"><img class = "' + image_id+'" name="image" data-src="' + image_url + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+image_id+'"value="'+image_id+'"></label><i class="fa fa-refresh icon_refresh '+image_id+'"></i></div>'); 
+										$('#imagesListMain').append('<div id=imagesList> <h5>'+el.size.height+' * '+el.size.width+'</h5> <h5> ( '+el.size.size+' ) </h5> <label for="'+image_id+'"><img class = "' + image_id+'" name="image" data-src="' + image_url + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+image_id+'"value="'+image_id+'"></label><i class="fa fa-refresh icon_refresh '+image_id+'"></i></div>'); 
 							
-										}
+										} 
 										else{
-											$('#imagesListMain').append('<div id=imagesList><h5>'+el.size.height+' * '+el.size.width+'</h5><h5>( '+el.size.size+' ) </h5>  <label for="'+image_id+'"><img class = "'+image_id+ '" name="image" data-src="' + image_url + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+image_id+'"value="'+image_id+'"></label><i class="fa fa-refresh icon_refresh '+image_id+'"</i></div>'); 
-											}
+											$('#imagesListMain').append('<div id=imagesList> <h5>'+el.size.height+' * '+el.size.width+'</h5> <h5>( '+el.size.size+' ) </h5>  <label for="'+image_id+'"><img class = "'+image_id+ '" name="image" data-src="' + image_url + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+image_id+'"value="'+image_id+'"></label><i class="fa fa-refresh icon_refresh '+image_id+'"</i></div>'); 
+										}
 										
-									});
-									
+								});
+										//Selecting all images and applying lazy loading on it
 										const targets = document.querySelectorAll('img');
 										targets.forEach(lazyLoad);
-				 });
-			}); 
+						});
+	}
 
-		$("#deleteBtn").click(function(){
+	//Event binding whenever url change
+	$(window).bind('hashchange', function() {
+			console.log("hash")
+		  var line = $(location).attr('href').split('#');
+		  var line2 = line[1].split('-');
+			var page_num = line2[1];
+	
+			highlightPage(page_num);
+			fetchData(page_num);
+	}); 
+
+	//Function on click of store button
+	$("#storeBtn").click(function(){
 			var likedImage = [];
 			var obj = {};
-
+				//Getting all checked images data
         $.each($("input[name='image']:checked"), function(){    
 								obj = {};  
 								console.log($(this).val());
@@ -131,10 +116,9 @@
 									
 								}
 						});
-						
-							// console.log(likedImage);
 							if(likedImage.length>0)
 							{
+								//Calling store api
 								$.post("store",
 								{
 									image_data: likedImage
@@ -147,6 +131,7 @@
 						else
 						alert("Please select images to insert.");
 		});
+		//Function on click of clear button
 		$("#clearBtn").click(function(){
 		
 				var r = confirm("Are you sure you want to clear csv");
@@ -166,78 +151,24 @@
 								else{
 									page_num = 1;
 								}
-
-								$(function() {
-										$('#pagination').pagination('drawPage',page_num);
-							});
-									$.post("getPageData",
-										{
-											page: page_num
-										},
-										function(data,status){
-											$('#imagesListMain').empty();
-											console.log("cleared data");
-												data.data.map((el)=> 
-												{
-													var data = el.value.split(",");
-													var image_id = data[0];
-													data.shift()
-													var image_url = data.join(",");
-													if(el.checked)
-													{
-													$('#imagesListMain').append('<div id=imagesList> <h5>'+el.size.height+' * '+el.size.width+'</h5><h5>( '+el.size.size+' ) </h5>  <label for="'+image_id+'"><img class = "' + image_id+'" name="image" data-src="' + image_url + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+image_id+'"value="'+image_id+'"></label><i class="fa fa-refresh icon_refresh '+image_id+'"></i></div>'); 
-										
-													}
-													else{
-														$('#imagesListMain').append('<div id=imagesList><h5>'+el.size.height+' * '+el.size.width+'</h5> <h5>( '+el.size.size+' ) </h5> <label for="'+image_id+'"><img class = "'+image_id+ '" name="image" data-src="' + image_url + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+image_id+'"value="'+image_id+'"></label><i class="fa fa-refresh icon_refresh '+image_id+'"</i></div>'); 
-														}
-										
-										
-												});
-												
-													const targets = document.querySelectorAll('img');
-													targets.forEach(lazyLoad);
-						});
+								highlightPage(page_num);
+								fetchData(page_num);
 						});
 				}
 		});
 
-
+		//Pagination 
 		$('#pagination').pagination({
-        items: 12683,
-        itemsOnPage: 800,
+        items: 630, //total items
+        itemsOnPage: 100,
 				cssStyle: 'light-theme',
 				onPageClick: function(pageNumber) {
-						console.log($(location).attr('href'));
-						console.log(pageNumber);
-						$.post("getPageData",
-						{	page: pageNumber
-						},
-						function(data,status){
-							$('#imagesListMain').empty();
-							console.log(data);
-							  data.data.map((el)=> 
-								{
-										var data = el.value.split(",");
-										var image_id = data[0];
-										data.shift()
-										var image_url = data.join(",");
-										if(el.checked)
-										{
-										$('#imagesListMain').append('<div id=imagesList> <h5>'+el.size.height+' * '+el.size.width+'</h5><h5>( '+el.size.size+' ) </h5>  <label for="'+image_id+'"><img class = "' + image_id+'" name="image" data-src="' + image_url + '"/><input name="image"  type="checkbox" checked style="width:40px;height:35px" id = "'+image_id+'"value="'+image_id+'"></label><i class="fa fa-refresh icon_refresh '+image_id+'"></i></div>'); 
-							
-										}
-										else{
-											$('#imagesListMain').append('<div id=imagesList><h5>'+el.size.height+' * '+el.size.width+'</h5><h5>( '+el.size.size+' ) </h5>  <label for="'+image_id+'"><img class = "'+image_id+ '" name="image" data-src="' + image_url + '"/><input  name="image"  type="checkbox" style="width:40px;height:35px" id = "'+image_id+'"value="'+image_id+'"></label><i class="fa fa-refresh icon_refresh '+image_id+'"</i></div>'); 
-											}
-								});
-									
-										const targets = document.querySelectorAll('img');
-										targets.forEach(lazyLoad);
-						});
+					fetchData(pageNumber);
         }
 		});
 });
+
+//Refresh image
 $(document).on('click','.icon_refresh',function(){
 let classList = this.classList;
 console.log('.'+classList[3]);
@@ -256,7 +187,6 @@ $('.'+classList[3]).attr("src", srcImage + '?' + Math.random());
 	}
 	#imagesList
 	{
-		/* width: 250px; */
 		width: 12%;
     float: left;
 		text-align: center;
@@ -265,12 +195,9 @@ $('.'+classList[3]).attr("src", srcImage + '?' + Math.random());
 			}
 	#imagesList img
 	{
-	/* box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1); */
 		object-fit: contain;
 		padding: 10px;
-	  /* height: 300px; */
 		height: 200px;
-    /* width: 100%; */
 		width: 95%;
 		float: left;
 	}
@@ -285,8 +212,8 @@ $('.'+classList[3]).attr("src", srcImage + '?' + Math.random());
     overflow: hidden;
     padding: 25px 5px 5px 15px;
     margin: 0;
-}
-#deleteBtn {
+	}
+	#storeBtn {
       left: 5px;
       position: fixed;
       top: 18px;
@@ -340,53 +267,38 @@ $('.'+classList[3]).attr("src", srcImage + '?' + Math.random());
 			box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 
     }
-	body{
-		font-family: 'Roboto', sans-serif;
+		body{
+			font-family: 'Roboto', sans-serif;
+		}
+		.light-theme{
+			font-family: 'Roboto', sans-serif;
+			font-size: 11px;
+			text-transform: uppercase;
+			letter-spacing: 2.5px;
+			font-weight: 500;
+		}
+		.light-theme a{
+		text-decoration: none;
+		}
+
+	/* Hide the browser's default checkbox */
+	.container input {
+		position: absolute;
+		opacity: 0;
+		cursor: pointer;
+		height: 0;
+		width: 0;
 	}
-	.light-theme{
-		font-family: 'Roboto', sans-serif;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-    font-weight: 500;
+
+	/* Create a custom checkbox */
+	.checkmark {
+		position: absolute;
+			top: 0;
+			left: 35px;
+			height: 35px;
+			width: 35px;
+			background-color: #aaa;
 	}
-	.light-theme a{
-	text-decoration: none;
-	}
-
-
-/* 
-	.container {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 22px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* Hide the browser's default checkbox */
-.container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-/* Create a custom checkbox */
-.checkmark {
-  position: absolute;
-    top: 0;
-    left: 35px;
-    height: 35px;
-    width: 35px;
-    background-color: #aaa;
-}
 
 /* On mouse-over, add a grey background color */
 .container:hover input ~ .checkmark {
@@ -425,20 +337,26 @@ $('.'+classList[3]).attr("src", srcImage + '?' + Math.random());
 </style>
 </head>
 <body>
-<div id= "wrapper"><div id="pagination"></div></div>
+<!-- Wrapper for Pagination -->
+<div id= "wrapper">
+	<div id="pagination"></div>
+</div>
 
+<!-- Wrapper for Pagination -->
 <div id="imagesListMain">
 </div>
 <div style="height: 20px;width:100%;float:left"></div>
+<!-- Button to store checked images -->
 <div>
-<button id="deleteBtn">Store</button>
+<button id="storeBtn">Store</button>
 </div>
 <!-- <div>
 	<button id="clearBtn">Clear</button>
-	</div> -->
+</div> -->
+<!-- Button to download selected images CSV file -->
 <div>
 	<a id="downloadBtn" href="/likedImage.csv" download="likedImage.csv">Download</a>
-	</div>
+</div>
 
 
 </body>
